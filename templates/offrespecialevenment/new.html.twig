@@ -1,0 +1,81 @@
+{% extends 'da.html.twig' %}
+
+{% block title %}New Offrespecialevenment{% endblock %}
+
+{% block content %} 
+<h1 class="text-center mb-4">New Special Event</h1>
+
+    <div class="container mt-4">
+
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+        <div class="row">
+            <div class="col-md-6">
+                <h2>General Information</h2>
+                <hr>
+                <div class="form-group">
+                    {{ form_label(form.titre, 'Title') }}
+                    {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.description, 'Description') }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.dateDepart, 'Departure Date') }}
+                    {{ form_widget(form.dateDepart, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.prix, 'Price') }}
+                    {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h2>Additional Details</h2>
+                <hr>
+                <div class="form-group">
+                    {{ form_label(form.categorie, 'Category') }}
+                    {{ form_widget(form.categorie, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.guideId, 'Guide ID') }}
+                    {{ form_widget(form.guideId, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.destination, 'Destination') }}
+                    {{ form_widget(form.destination, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.image, 'Image') }}
+                    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.niveau, 'Level') }}
+                    {{ form_widget(form.niveau, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        {{ form_end(form) }} 
+
+        <a href="{{ path('app_offrespecialevenment_index') }}" class="btn btn-secondary mt-3">Back to List</a>
+    </div> 
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        });
+    </script>
+
+{% endblock %}

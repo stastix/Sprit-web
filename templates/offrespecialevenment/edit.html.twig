@@ -1,0 +1,14 @@
+{% extends 'da.html.twig' %}    
+{% block content %}
+
+
+{% block title %}Edit Offrespecialevenment{% endblock %}
+
+    <h1>Edit Offrespecialevenment</h1>
+
+    {{ include('offrespecialevenment/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_offrespecialevenment_index') }}">back to list</a>
+
+    {{ include('offrespecialevenment/_delete_form.html.twig') }}
+{% endblock %}
