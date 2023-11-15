@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90680653-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-90680653-2');
+    </script>
+
+    {% block title %}
+
+    <title>complaints</title>
+
+ {%  endblock %}
+
+
+    {% block stylesheet %}
+
+    {% include 'admin/inc/stylesheet.html.twig' %}
+    
+        {% include 'admin/inc/stylesheet.html.twig' %}
+        <style>
+            /* Add custom styles for the table */
+            table {
+                max-width: 80%; /* Set a maximum width for the table */
+                margin: auto;   /* Center the table */
+            }
+        </style>
+
+ {%  endblock %}
+ {% block meta %}
+
+ {% include 'admin/inc/meta.html.twig' %}
+
+{%  endblock %}
+
+
+    
+  </head>
+  <body>
+
+    {% block header %}
+
+    {% include 'admin/inc/header.html.twig' %}
+   
+   {%  endblock %}
+
+  
+   {% block content %}
+
+{% block body %}
+    <h1>List books</h1>
+
+    <table class="table" border="2px">
+        <thead>
+            <tr>
+                
+                <th>User Name</th>
+                <th>Destination</th>
+                <th>Type</th>
+                <th>Duration</th>
+                <th>Descriton</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for demande in demands %}
+            <tr>
+                <td>{{ demande.UseName.nom }}</td>
+                <td>{{ demande.destination }}</td>
+                <td>{{ demande.type  }}</td>
+                <td>{{ demande.duration  }}</td>
+                <td>{{ demande.description  }}</td>
+                <td>
+                    <a href="drachnowa.twig">delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+
+
+
+  
+  {%  endblock %}
+  {% block footer %}
+
+    {% include 'admin/inc/footer.html.twig' %}
+   
+   {%  endblock %}
+
+
+   
+   {% block script %}
+
+   {% include 'admin/inc/script.html.twig' %}
+  
+  {%  endblock %}
+
+  </body>
+</html>
