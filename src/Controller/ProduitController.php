@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 use App\Entity\Produit;
+use App\Entity\Commande;
 use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,8 +77,30 @@ public function editProduct(Request $request, ManagerRegistry $manager, $id, Pro
         
                 return $this->redirectToRoute('generate_product');
      
+
     }
-        }    
+    #[Route('/produit/commandessss/{id}', name: 'produit_commande')]
+  
+    public function ajouterCommande($id,ProduitRepository $produitRepository, ManagerRegistry $manager): Response
+    {
+        $commande = new Commande();
+    $produit =$produitRepository->find($id);
+       
+        $commande->setUserId(4);
+        $commande->setPathFacture('images/valise.jpg');
+
+        // Associer la commande au produit
+        $commande->setProductId($id);
+        $commande->setProduit($produit);
+        $em= $manager->getManager();
+     
+       $em->persist($commande);
+       $em->flush();
+       $this->addFlash('success','commande validee');
+        return $this->redirectToRoute('acheter_product');
+    }
+   
+}    
 
 
 

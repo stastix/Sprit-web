@@ -22,6 +22,10 @@ class Commande
     #[ORM\Column(length: 255)]
     private ?string $pathFacture = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Commande')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Produit $produit = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +63,18 @@ class Commande
     public function setPathFacture(string $pathFacture): static
     {
         $this->pathFacture = $pathFacture;
+
+        return $this;
+    }
+
+    public function getProduit(): ?Produit
+    {
+        return $this->produit;
+    }
+
+    public function setProduit(?Produit $produit): static
+    {
+        $this->produit = $produit;
 
         return $this;
     }
