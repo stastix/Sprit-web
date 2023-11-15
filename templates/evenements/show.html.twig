@@ -1,0 +1,58 @@
+{# templates/evenements/show.html.twig #}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/tableau.css') }}">
+    <!-- Lien vers Font Awesome via CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+{% endblock %}
+{% block body %}
+    <h1>Liste des événements</h1>
+<button type="button" onclick="window.location='{{ path('evenements_add') }}'">Ajouter</button>
+    
+<table class="custom-table">    
+<thead>
+        <tr>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Date de départ</th>
+            <th>Type d'événement</th>
+            <th>Guide ID</th>
+            <th>Destination</th>
+            <th>Image</th>
+            <th>Sponsor de l'événement</th>
+            <th>Prix</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for evenement in evenements %}
+            <tr>
+                <td>{{ evenement.titre }}</td>
+                <td>{{ evenement.description }}</td>
+                <td>{{ evenement.dateDepart ? evenement.dateDepart|date('Y-m-d') : '' }}</td>
+                <td>{{ evenement.typeevenement }}</td>
+                <td>{{ evenement.guideId }}</td>
+                <td>{{ evenement.destination }}</td>
+                <td>{{ evenement.image }}</td>
+                <td>{{ evenement.sponsorevenement }}</td>
+                <td>{{ evenement.prix }}</td>
+                <td>
+<form action="{{ path('evenements_edit', {'id': evenement.idevenement}) }}" method="GET">
+                        <button type="submit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+</form>            
+<form action="{{ path('evenements_delete', {'id': evenement.idevenement}) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ evenement.idevenement) }}">
+                        <button type="submit">
+
+                                <i class="fas fa-trash-alt"></i>
+                        </button>
+
+</form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

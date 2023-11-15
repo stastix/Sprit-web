@@ -1,0 +1,10 @@
+{# templates/evenements/edit.html.twig #}
+{% block body %}
+    <h1>Modifier un événement</h1>
+      <a href="{{ path('evenements_show') }}">Retour</a>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Modifier</button>
+    {{ form_end(form) }}
+{% endblock %}

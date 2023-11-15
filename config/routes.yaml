@@ -1,0 +1,36 @@
+index:
+    path: /
+    controller: App\Controller\DefaultController::index
+
+sponsor_add:
+    path: /sponsor/add
+    controller: 'App\Controller\SponsorController::add'
+    methods: ['GET', 'POST']
+
+sponsor_edit:
+    path: /sponsor/edit/{id}
+    controller: 'App\Controller\SponsorController::edit'
+    methods: ['GET', 'POST']
+
+sponsor_delete:
+    path: /sponsor/delete/{id}
+    controller: 'App\Controller\SponsorController::delete'
+    methods: ['POST']
+
+
+evenements_show:
+    path: /evenements/show
+    controller: 'App\Controller\EvenementsController::show'
+    methods: ['GET']
+
+
+evenements_edit:
+    path: /evenements/edit/{id}
+    controller: 'App\Controller\EvenementsController::edit'
+    methods: ['GET', 'POST']
+
+evenements_delete:
+    path: /evenements/delete/{id}
+    controller: 'App\Controller\EvenementsController::delete'
+    methods: ['POST']
+

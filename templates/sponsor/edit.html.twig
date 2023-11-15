@@ -1,0 +1,10 @@
+
+{% block body %}
+    <h1>Modifier un sponsor</h1>
+    <a href="{{ path('sponsor_show') }}">Retour</a>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Modifier</button>
+    {{ form_end(form) }}
+{% endblock %}
