@@ -28,8 +28,8 @@ class DemandeType extends AbstractType
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\LessThanOrEqual([
-                        'value' => 10,
-                        'message' => 'Duration must not exceed 10 days.',
+                        'value' => 30,
+                        'message' => 'Duration must not exceed 30 days.',
                     ]),
                 ],
             ])

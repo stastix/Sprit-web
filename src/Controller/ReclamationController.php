@@ -28,7 +28,7 @@ class ReclamationController extends AbstractController
  #[Route('/reclamation/add', name: 'add_reclamation')]
 public function addReclamation(Request $request, ManagerRegistry $managerRegistry, ReclamationRepository $reclamationRepository,UserRepository $userRepository): Response
 {
-    $user=$userRepository->find(1);
+    $user=$userRepository->find(2);
     $em = $managerRegistry->getManager();
     $reclamation = new Reclamation();
     

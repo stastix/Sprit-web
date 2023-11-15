@@ -21,7 +21,7 @@ class DemandeController extends AbstractController
     #[Route('/demande', name: 'add_demande')]
     public function index(Request $request, ManagerRegistry $managerRegistry,DemandeRepository $demandeRepository,UserRepository $userRepository): Response
     {
-        $user=$userRepository->find(2);
+        $user=$userRepository->find(3);
         $em = $managerRegistry->getManager();
         $demande = new Demande();
         $form = $this->createForm(DemandeType::class, $demande);
@@ -30,9 +30,9 @@ class DemandeController extends AbstractController
 
                 $duration = $form->get('duration')->getData();
 
-                if ($duration > 10) {
+                if ($duration > 30) {
                
-                    $this->addFlash('successC', 'Duration must not exceed 10 days.');
+                    $this->addFlash('successC', 'Duration must not exceed 30 days.');
                 } else {
                 $demande->setUseName($user); 
 
