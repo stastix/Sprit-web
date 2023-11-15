@@ -20,13 +20,28 @@ class ProduitController extends AbstractController
         $em = $manager->getManager();
 
         $produit = new produit();
-    
+        
         $form = $this->createForm(ProduitType::class, $produit);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-           
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($produit->getStock() < 0) {
+                $this->addFlash('danger', 'Le stock ne peut pas être négatif.');
+                return $this->redirectToRoute('generate_product');
+            }
+            if ($produit->getPrixUnitaire() < 0) {
+                $this->addFlash('danger', 'Le prix ne peut pas être négatif.');
+                return $this->redirectToRoute('generate_product');
+            }
+            if (null === $produit->getNom()) {
+                $this->addFlash('danger', 'Le champ "Nom" ne peut pas être vide.');
+                return $this->redirectToRoute('generate_product');
+            }
+        
+        
             $em->persist($produit);
             $em->flush();
+    
             return $this->render('produit/index.html.twig', [
                 'produits' => $produitRepository->findAll(),
                 'f' => $form->createView()]);
@@ -37,7 +52,7 @@ class ProduitController extends AbstractController
                 'f' => $form->createView()]);
         }
 
-
+    
         #[Route('/boutique.html', name: 'acheter_product')]
         public function pbooking(ProduitRepository $produitRepository ): Response
 {      
@@ -84,19 +99,19 @@ public function editProduct(Request $request, ManagerRegistry $manager, $id, Pro
     public function ajouterCommande($id,ProduitRepository $produitRepository, ManagerRegistry $manager): Response
     {
         $commande = new Commande();
-    $produit =$produitRepository->find($id);
+        $produit =$produitRepository->find($id);
        
         $commande->setUserId(4);
         $commande->setPathFacture('images/valise.jpg');
 
-        // Associer la commande au produit
+        
         $commande->setProductId($id);
         $commande->setProduit($produit);
         $em= $manager->getManager();
      
        $em->persist($commande);
        $em->flush();
-       $this->addFlash('success','commande validee');
+       $this->addFlash('success','order validated');
         return $this->redirectToRoute('acheter_product');
     }
    
