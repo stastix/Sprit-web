@@ -1,0 +1,37 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if the browser supports notifications
+        if (!('Notification' in window)) {
+            console.log('This browser does not support desktop notifications.');
+            return;
+        }
+
+        // Check if permission is already granted
+        if (Notification.permission === 'granted') {
+            // If it's okay, create a notification
+            showNotification();
+        } else if (Notification.permission !== 'denied') {
+            // Otherwise, ask for permission
+            Notification.requestPermission().then(function(permission) {
+                if (permission === 'granted') {
+                    showNotification();
+                }
+            });
+        }
+    });
+
+    function showNotification() {
+        // Read the message from the data attribute
+        var message = '{{ message }}';
+
+        // Check if the message is not empty
+        if (message !== 'null') {
+            // Create a notification with the retrieved message
+            var notification = new Notification(message);
+
+            notification.addEventListener('click', function() {
+                window.location.href = '{{ path("app_offrespecialevenment_index") }}';
+            });
+        }
+    }
+</script>

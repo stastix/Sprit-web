@@ -44,7 +44,7 @@ class Cartefidelite
     #[ORM\Column(name: 'NiveauCarte', type: 'string', length: 9, nullable: false)]
     private string $niveaucarte;
 
-    #[ORM\OneToOne(inversedBy: 'cartefidelite', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'cartefidelite', cascade: ['persist'])]
     private ?User $user = null;
 
     public function getIdcarte(): ?int

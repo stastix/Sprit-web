@@ -2,3 +2,7 @@ cartefidelite_index:
     path: /cartefidelite/index
     controller: 'App\Controller\CartefideliteController::index'
     methods: ['GET']
+
+generate_qr_code:
+    path: /generate-qr-code/{id}
+    controller: App\Controller\CartefideliteController::generateQRCode

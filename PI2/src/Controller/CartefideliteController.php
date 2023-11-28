@@ -10,17 +10,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Endroid\QrCode\Builder\BuilderInterface;
+use Endroid\QrCodeBundle\Response\QrCodeResponse;
 
 #[Route('/cartefidelite')]
 class CartefideliteController extends AbstractController
 { 
-/**
- * @Route("/index", name="app_cartefidelite_index", methods={"GET"})
- */
+
+#[Route('/', name: 'app_cartefidelite_index', methods: ['GET'])]
 public function index(CartefideliteRepository $cartefideliteRepository): Response
-{
+{$cartes = $cartefideliteRepository->findAll();  
+
     return $this->render('cartefidelite/index.html.twig', [
-        'cartefidelites' => $cartefideliteRepository->findAll(),
+        'cartefidelites' => $cartes,
+        'message' => 'null'
     ]);
 }
     #[Route('/new', name: 'app_cartefidelite_new', methods: ['GET', 'POST'])]
@@ -33,12 +36,12 @@ public function index(CartefideliteRepository $cartefideliteRepository): Respons
 
         $form = $this->createForm(CartefideliteType::class, $cartefidelite);
         $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) { 
+            $em = $this->getDoctrine()->getManager(); 
+            $em->persist($cartefidelite);
+            $em->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($cartefidelite);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_cartefidelite_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_cartefidelite_index', ['message' => 'La carte fedelite créée avec succès'], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('cartefidelite/new.html.twig', [
@@ -48,14 +51,19 @@ public function index(CartefideliteRepository $cartefideliteRepository): Respons
     }
 
     #[Route('/{idcarte}', name: 'app_cartefidelite_show', methods: ['GET'])]
-    public function show(Cartefidelite $cartefidelite): Response
+    public function show(Cartefidelite $cartefidelite = null): Response
     {
+        if (!$cartefidelite) {
+            return $this->redirectToRoute('app_cartefidelite_index', ['message' => "La carte fedelite n'existe pas"], Response::HTTP_SEE_OTHER);
+        }
+    
         return $this->render('cartefidelite/show.html.twig', [
             'cartefidelite' => $cartefidelite,
         ]);
     }
+    
         
-    #[Route('/{idcarte}/edit', name: 'app_cartefidelite_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{idcarte}', name: 'app_cartefidelite_edit')]
     public function edit(Request $request, Cartefidelite $cartefidelite, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CartefideliteType::class, $cartefidelite);
@@ -64,7 +72,7 @@ public function index(CartefideliteRepository $cartefideliteRepository): Respons
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_cartefidelite_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_cartefidelite_index', ['message' => 'La carte fedelite mise à jour avec succès'], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('cartefidelite/edit.html.twig', [
@@ -81,6 +89,18 @@ public function index(CartefideliteRepository $cartefideliteRepository): Respons
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_cartefidelite_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_cartefidelite_index', ['message' => 'La carte fedelite supprimer'], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/generate-qr-code/{id}', name: 'generate_qr_codee')]
+    public function generateQRCode($id,BuilderInterface $customQrCodeBuilder)
+    {
+    $result = $customQrCodeBuilder
+    ->size(400)
+    ->margin(20)
+    ->data("http://192.168.1.17:8000/cartefidelite/".$id)
+    ->build();
+    $response = new QrCodeResponse($result);
+    return $response;
+    }
+    
 }

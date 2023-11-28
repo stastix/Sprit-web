@@ -2,7 +2,34 @@
 
 {% block title %}Hello SpecialEventUserController!{% endblock %}
 
-{% block content %}
+{% block content %}  
+<head>
+    <!-- Your existing styles and other head content -->
+
+    <style>
+        /* Style for the text */
+        .niveau-text {
+            font-weight: bold;
+        }
+
+        /* Style for bronze level */
+        .niveau-bronze {
+            color: #cd7f32; /* Bronze color */
+        }
+
+        /* Style for silver level */
+        .niveau-silver {
+            color: #c0c0c0; /* Silver color */
+        }
+
+        /* Style for gold level */
+        .niveau-gold {
+            color: #ffd700; /* Gold color */
+        }
+    </style>
+</head>
+
+
 <section class="packages pt-5">
 	<div class="container py-lg-4 py-sm-3">
 		<h2 class="heading text-capitalize text-center"> Discover our tour packages</h2>
@@ -128,97 +155,53 @@
 <!-- tour packages -->
 
 <!-- destinations -->
+
+
 <section class="destinations py-5" id="destinations">
-	<div class="container py-xl-5 py-lg-3">
-		<h3 class="heading text-capitalize text-center"> Popular Destinations</h3>
-		<p class="text mt-2 mb-5 text-center">Vestibulum tellus neque, sodales vel mauris at, rhoncus finibus augue. Vestibulum urna ligula, molestie at ante ut, finibus vulputate felis.</p>
-		<div class="row inner-sec-w3layouts-w3pvt-lauinfo">
-			<div class="col-md-3 col-sm-6 col-6 destinations-grids text-center">
-				<h4 class="destination mb-3">China</h4>
-				<div class="image-position position-relative">
-					<img src="images/china.jpg" class="img-fluid" alt="">
-					<div class="rating">
-						<ul>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-						</ul>
+    <div class="container py-xl-5 py-lg-3">
+        <h3 class="heading text-capitalize text-center"> Special Events just for you </h3>
+        <p class="text mt-2 mb-5 text-center">Vestibulum tellus neque, sodales vel mauris at, rhoncus finibus augue. Vestibulum urna ligula, molestie at ante ut, finibus vulputate felis.</p>
+        <div class="row inner-sec-w3layouts-w3pvt-lauinfo">
+			<div class="row inner-sec-w3layouts-w3pvt-lauinfo">
+				{% for offrespecialevenment in offrespecialevenments %}
+					<div class="col-md-3 col-sm-6 col-6 destinations-grids text-center">
+						<h4 class="destination mb-3">{{ offrespecialevenment.titre }}</h4>
+						<div class="image-position position-relative"> 
+							<img src="{{ asset('img/' ~ offrespecialevenment.image) | default(asset('hero-bg.jpg')) }}" class="img-fluid" alt="{{ offrespecialevenment.destination }}">
+							<div class="rating">
+								<ul>
+									<li><span class="fa fa-star"></span></li>
+									<li><span class="fa fa-star"></span></li>
+									<li><span class="fa fa-star"></span></li>
+									<li><span class="fa fa-star"></span></li>
+									<li><span class="fa fa-star"></span></li>
+								</ul>
+							</div>
+						</div>
+						<div class="destinations-info">
+							<div class="caption mb-lg-3">
+								<h4>{{ offrespecialevenment.destination }}</h4>
+								<a href="{{ path('app_offrespecialevenment_booking', {'idoffrespecialevenment': offrespecialevenment.idoffrespecialevenment}) }}">Book Now</a>
+							</div>
+							<div class="rating">
+								<!-- Replace the stars with badge icons or images -->
+								<ul>
+									{% if offrespecialevenment.niveau == 'bronze' %}
+										<li><span class="badge badge-bronze" style="color: bronze;">Bronze users</span></li>
+									{% elseif offrespecialevenment.niveau == 'silver' %}
+										<li><span class="badge badge-silver" style="color: silver;">Silver users</span></li>
+									{% elseif offrespecialevenment.niveau == 'gold' %}
+										<li><span class="badge badge-gold" style="color: gold;">Gold users</span></li>
+									{% endif %}
+									<!-- Add more badge elements as needed -->
+								</ul>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="destinations-info">
-					<div class="caption mb-lg-3">
-						<h4>China</h4>
-						<a href="booking.html">Book Now</a>
-					</div>
-				</div>
+				{% endfor %}
 			</div>
-			<div class="col-md-3 col-sm-6 col-6 destinations-grids text-center">
-				<h4 class="destination mb-3">Malaysia</h4>
-				<div class="image-position position-relative">
-					<img src="images/malaysia.jpg" class="img-fluid" alt="">
-					<div class="rating">
-						<ul>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-						</ul>
-					</div>
-				</div>
-				<div class="destinations-info">
-					<div class="caption mb-lg-3">
-						<h4>Malaysia</h4>
-						<a href="booking.html">Book Now</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3 col-sm-6 col-6 destinations-grids text-center mt-md-0 mt-4">
-				<h4 class="destination mb-3">Japan</h4>
-				<div class="image-position position-relative">
-					<img src="images/japan.jpg" class="img-fluid" alt="">
-					<div class="rating">
-						<ul>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-						</ul>
-					</div>
-				</div>
-				<div class="destinations-info">
-					<div class="caption mb-lg-3">
-						<h4>Japan</h4>
-						<a href="booking.html">Book Now</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3 col-sm-6 col-6 destinations-grids text-center mt-md-0 mt-4">
-				<h4 class="destination mb-3">Singapore</h4>
-				<div class="image-position position-relative">
-					<img src="images/singapore.jpg" class="img-fluid" alt="">
-					<div class="rating">
-						<ul>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-							<li><span class="fa fa-star"></span></li>
-						</ul>
-					</div>
-				</div>
-				<div class="destinations-info">
-					<div class="caption mb-lg-3">
-						<h4>Singapore</h4>
-						<a href="booking.html">Book Now</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+						
+    </div>
 </section>
 <!-- destinations -->
 {% endblock %}

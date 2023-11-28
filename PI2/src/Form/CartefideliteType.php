@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Cartefidelite;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -12,6 +13,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver; 
 use Symfony\Component\Validator\Constraints as Assert; 
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\Date;
+
+use Doctrine\ORM\EntityRepository;
 
 
 
@@ -25,13 +30,25 @@ class CartefideliteType extends AbstractType
                 new Assert\GreaterThanOrEqual([
                     'value' => 0, 
 
-                    'message' => '',
+                    'message' => 'should be greater or equal to 0 ',
                 ]),
             ],
         ])
-        ->add('datedebut', DateType::class)
-        ->add('datefin', DateType::class)
-        ->add('etatcarte', ChoiceType::class, [
+        ->add('datedebut', DateType::class, [
+            'attr' => ['class' => 'js-datepicker'],
+        ])
+        
+        // Add 'datefin' field with constraints
+        ->add('datefin', DateType::class, [
+            'constraints' => [
+                new Assert\Expression([
+                    'expression' => 'this.getParent()["datedebut"].getData() <= value',
+                    'message' => 'End date must be equal to or greater than the start date.',
+                ]),
+            ],
+        ])
+        
+    ->add('etatcarte', ChoiceType::class, [
                 'choices' => [
                     'Active' => 'Active',
                     'Suspended' => 'suspended',
@@ -46,8 +63,9 @@ class CartefideliteType extends AbstractType
                 ],
             ])
             ->add('user', EntityType::class, [
-                'class' => 'App\Entity\User',
-                'choice_label' => 'prenom',
+                'class' => User::class,
+                'choice_label' => 'nom', // Change this to the property you want to display in the dropdown
+                'placeholder' => 'Select a user', // Optional placeholder text
             ]);
     }
 
