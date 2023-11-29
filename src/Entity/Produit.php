@@ -30,9 +30,13 @@ class Produit
     #[ORM\OneToMany(mappedBy: 'produit', targetEntity: Commande::class, orphanRemoval: true)]
     private Collection $commande;
 
+    #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'produits')]
+    private Collection $carts;
+
     public function __construct()
     {
         $this->commande = new ArrayCollection();
+        $this->carts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,6 +117,33 @@ class Produit
             if ($commande->getProduit() === $this) {
                 $commande->setProduit(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cart>
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): static
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts->add($cart);
+            $cart->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): static
+    {
+        if ($this->carts->removeElement($cart)) {
+            $cart->removeProduit($this);
         }
 
         return $this;

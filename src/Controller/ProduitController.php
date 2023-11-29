@@ -102,8 +102,14 @@ public function editProduct(Request $request, ManagerRegistry $manager, $id, Pro
         $produit =$produitRepository->find($id);
        
         $commande->setUserId(4);
-        $commande->setPathFacture('images/valise.jpg');
-
+        $factureFileName = 'facture_' . uniqid() . '.jpg';
+    
+        // Save the facture image to the public directory
+        $facturePath = $this->getParameter('kernel.project_dir') . '/public/images/' . $factureFileName;
+        // Assuming you have the facture image data available in $factureImageData
+        // Example: file_put_contents($facturePath, $factureImageData);
+    
+        $commande->setPathFacture('images/' . $factureFileName);
         
         $commande->setProductId($id);
         $commande->setProduit($produit);
@@ -114,7 +120,8 @@ public function editProduct(Request $request, ManagerRegistry $manager, $id, Pro
        $this->addFlash('success','order validated');
         return $this->redirectToRoute('acheter_product');
     }
-   
+    
+    
 }    
 
 
