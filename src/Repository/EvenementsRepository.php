@@ -21,6 +21,68 @@ class EvenementsRepository extends ServiceEntityRepository
         parent::__construct($registry, Evenements::class);
     }
 
+
+
+
+
+
+
+
+
+
+    public function findLowBudgetEvents(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.prix', 'ASC') 
+            ->setMaxResults(10) 
+            ->getQuery()
+            ->getResult();
+    }
+
+public function findClosestEvent(): ?Evenements
+{
+    return $this->createQueryBuilder('e')
+        ->where('e.dateDepart >= :currentDate')
+        ->setParameter('currentDate', new \DateTime('now'))
+        ->orderBy('e.dateDepart', 'ASC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+}
+public function findByCriteria($criteria, $searchValue): array
+{
+    $qb = $this->createQueryBuilder('e');
+    switch ($criteria) {
+        case 'destination':
+            $qb->andWhere($qb->expr()->like('e.destination', ':destination'))
+               ->setParameter('destination', '%' . $searchValue . '%');
+            break;
+        case 'typeevenement':
+            $qb->andWhere($qb->expr()->like('e.typeEvenement', ':type'))
+               ->setParameter('type', '%' . $searchValue . '%'); // Assurez-vous que le nom de la colonne est correct
+            break;
+        case 'titre':
+            $qb->andWhere($qb->expr()->like('e.titre', ':titre'))
+               ->setParameter('titre', '%' . $searchValue . '%');
+            break;
+        default:
+            throw new \InvalidArgumentException('Critère de recherche invalide');
+    }
+    $query = $qb->getQuery();
+
+    // Utilisez getResult() pour obtenir un tableau d'objets
+    $results = $query->getResult();
+
+    // Assurez-vous que les résultats sont retournés en tant que tableau
+    return is_array($results) ? $results : [];
+}
+
+
+
+
+
+}
+
 //    /**
 //     * @return Evenements[] Returns an array of Evenements objects
 //     */
@@ -45,4 +107,4 @@ class EvenementsRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-}
+

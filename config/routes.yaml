@@ -34,3 +34,17 @@ evenements_delete:
     controller: 'App\Controller\EvenementsController::delete'
     methods: ['POST']
 
+
+
+app_events:
+    path: /events
+    controller: 'App\Controller\EvenementsController::events'
+   
+evenements_generate_pdf:
+    path: '/evenements/generate-pdf'
+    controller: 'App\Controller\EvenementsController::generatePDF'
+    methods: ['GET']
+
+evenements_search_ajax:
+    path: /evenements/search
+    controller: App\Controller\EvenementsController::searchEvenementsAjax

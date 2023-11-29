@@ -53,7 +53,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<ul class="menu ml-auto mt-1">
 				<li class=""><a href="index.html">Home</a></li>
 				<li class=""><a href="avis.html">Notice</a></li>
-				<li class=""><a href="evenements.html">Events</a></li>
+				<li class=""><a href="{{ path('app_events') }}">Events</a></li>
 				<li class=""><a href="boutique.html">Shop</a></li>
 				<li class=""><a href="contact.html">Fidelity card</a></li>
 				<li class=""><a href="">Services</a></li>
@@ -94,6 +94,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</div>
 				</div>
 			</li>
+			
 			<li>
 				<div class="banner-top1">
 					<div class="overlay">
@@ -152,7 +153,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</div>
 </section>
 <!-- //banner -->
-
+ <div id="content">
+        {% block content %}{% endblock %}
+    </div>
 
 <!-- tour packages -->
 <section class="packages py-5">

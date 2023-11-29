@@ -43,6 +43,7 @@ class Sponsor
     private $emailsponsor;
 
     #[ORM\Column(name: "duree", type: "string", length: 255, nullable: true)]
+    #[Assert\NotBlank (message:"Quelle est la durée du sponsoring?")]
     private $duree;
 
 

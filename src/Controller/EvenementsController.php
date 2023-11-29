@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Evenements;
 use App\Form\EvenementsType;
@@ -12,12 +13,30 @@ use Symfony\Component\HttpFoundation\Request;
 use DateTimeImmutable;
 use App\Repository\EvenementsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mime\Email; 
 
-
-
+use Symfony\Component\Mailer\MailerInterface; 
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use App\Service\PdfService;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class EvenementsController extends AbstractController
 {
+
+
+
+    private $mailer;
+
+    public function __construct(SerializerInterface $serializer,MailerInterface $mailer)
+    {
+        $this->mailer = $mailer;
+        $this->serializer = $serializer;
+
+    }
+
+
+
     #[Route('/evenements', name: 'app_evenements')]
     public function index(): Response
     {
@@ -47,8 +66,23 @@ class EvenementsController extends AbstractController
                 $entityManager->persist($evenement);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'L\'événement a été ajouté avec succès.');
-                // Redirect after successful addition
+                // Construire le contenu de l'e-mail avec les données brutes du formulaire
+                $emailContent = "Nouvel événement ajouté :\n\n";
+                $emailContent .= "Titre : " . $evenement->getTitre() . "\n";
+                $emailContent .= "Destination : " . $evenement->getDestination(). "\n";
+
+                // Ajoutez d'autres détails de l'événement selon vos besoins
+
+                // Création de l'e-mail
+                $email = (new Email())
+                    ->from('tinderrhea2021@gmail.com')
+                    ->to('mkanzari001@gmail.com')
+                    ->subject('Nouvel événement ajouté')
+                    ->text($emailContent); // Utilisation de text() pour spécifier le contenu en texte brut
+
+                // Envoi de l'e-mail via le Mailer
+                $this->mailer->send($email);
+
                 return $this->redirectToRoute('evenements_show');
             }
         }
@@ -135,6 +169,65 @@ public function delete(Request $request, int $id, EntityManagerInterface $entity
 
     return $this->redirectToRoute('evenements_show');
 }
+
+
+#[Route('/evenements/generate-pdf', name: 'evenements_generate_pdf')]
+public function generatePDF(EvenementsRepository $evenementsRepository, PdfService $pdfService): Response
+{
+    // Récupérer tous les événements depuis le repository
+    $evenements = $evenementsRepository->findAll();
+
+    // Générer le contenu HTML à partir des événements récupérés
+    $htmlContent = $this->renderView('evenements/show.html.twig', [
+        'evenements' => $evenements,
+    ]);
+
+    // Générer le PDF à partir du contenu HTML
+    $pdfContent = $pdfService->generatePdfFromHtml($htmlContent);
+
+    // Renvoyer le PDF en tant que réponse pour le téléchargement
+    $response = new Response($pdfContent);
+    $response->headers->set('Content-Type', 'application/pdf');
+    $response->headers->set('Content-Disposition', 'attachment;filename=evenements.pdf');
+
+    return $response;
+}
+
+
+#[Route('/events', name: 'app_events')]
+public function events(EvenementsRepository $evenementsRepository): Response
+{
+    $lowBudgetEvents = $evenementsRepository->findLowBudgetEvents();
+
+    $data = [];
+    foreach ($lowBudgetEvents as $event) {
+        $data[$event->getTitre()] = $event->getPrix();
+    }
+
+    $closestEvent = $evenementsRepository->findClosestEvent();
+
+    return $this->render('espaceclient/events.html.twig', [
+        'data' => $data,
+        'closestEvent' => $closestEvent,
+    ]);
+}
+
+
+
+#[Route('/evenements/search', name: 'evenements_search_ajax')]
+public function searchEvenementsAjax(Request $request, EvenementsRepository $repository, SerializerInterface $serializer)
+{
+    $criteria = $request->query->get('criteria');
+    $searchValue = $request->query->get('searchValue');
+
+    $evenements = $repository->findByCriteria($criteria, $searchValue);
+
+    // Serialize les événements pour les renvoyer en JSON
+    $data = $serializer->serialize($evenements, 'json', ['groups' => 'evenements']);
+
+    return new JsonResponse($data, 200, [], true);
+}
+
 
 
 }

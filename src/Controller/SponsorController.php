@@ -45,10 +45,6 @@ class SponsorController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($sponsor);
                 $entityManager->flush();
-
-
-                $this->addFlash('success', 'Le sponsor a été ajouté avec succès.');
-                // Redirect after successful addition
                 return $this->redirectToRoute('sponsor_show');
             }
         

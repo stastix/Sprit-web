@@ -7,6 +7,8 @@ parameters:
     image_directory: 'C:\Users\mkanz\Desktop\img_symfo'
 
 services:
+    Symfony\Component\Serializer\SerializerInterface: '@serializer'
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

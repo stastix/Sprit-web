@@ -63,8 +63,8 @@ private ?int $guideId = null;
 private ?string $destination = null;
 
 
-
 #[ORM\Column(length: 255)]
+#[Assert\NotBlank (message:"Inserez une image")]
 private ?string $image = null;
 
 #[ORM\Column(length: 255)]

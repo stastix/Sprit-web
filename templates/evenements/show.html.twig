@@ -8,7 +8,23 @@
 {% block body %}
     <h1>Liste des événements</h1>
 <button type="button" onclick="window.location='{{ path('evenements_add') }}'">Ajouter</button>
-    
+       <!-- Bouton PDF avec icône -->
+   <a href="{{ path('evenements_generate_pdf') }}" class="btn-pdf" target="_blank">
+        <button type="button" class="btn-pdf">
+            <i class="fas fa-file-pdf"></i> Télécharger en PDF
+        </button>
+    </a>
+      <!-- Formulaire de recherche -->
+ <form id="searchForm" action="{{ path('evenements_search_ajax') }}" method="GET">
+    <select id="criteria" name="criteria">
+        <option value="destination">Destination</option>
+        <option value="typeevenement">Type d'événement</option>
+        <option value="titre">Titre</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Rechercher...">
+    <button type="submit">Rechercher</button>
+</form>
+
 <table class="custom-table">    
 <thead>
         <tr>
@@ -24,7 +40,7 @@
             <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
+ <tbody id="custom-table-body">
         {% for evenement in evenements %}
             <tr>
                 <td>{{ evenement.titre }}</td>
@@ -37,22 +53,98 @@
                 <td>{{ evenement.sponsorevenement }}</td>
                 <td>{{ evenement.prix }}</td>
                 <td>
-<form action="{{ path('evenements_edit', {'id': evenement.idevenement}) }}" method="GET">
-                        <button type="submit">
+                    <form class="edit-form">
+                        <button type="button" data-edit-url="{{ path('evenements_edit', {'id': evenement.idevenement}) }}">
                             <i class="fas fa-edit"></i>
                         </button>
-</form>            
-<form action="{{ path('evenements_delete', {'id': evenement.idevenement}) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ evenement.idevenement) }}">
-                        <button type="submit">
-
-                                <i class="fas fa-trash-alt"></i>
+                    </form>
+                    <form class="delete-form" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ evenement.idevenement) }}">
+                        <button type="submit" data-delete-url="{{ path('evenements_delete', {'id': evenement.idevenement}) }}">
+                            <i class="fas fa-trash-alt"></i>
                         </button>
-
-</form>
+                    </form>
                 </td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+
+
+<!-- partie RECHERCHE AJAAAAXXX -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+   $(document).ready(function () {
+    $('#searchForm').submit(function (e) {
+        e.preventDefault();
+        var criteria = $('#criteria').val();
+        var searchValue = $('#searchInput').val();
+        
+        $.ajax({
+            url: '{{ path('evenements_search_ajax') }}',
+            type: 'GET',
+            data: {
+                criteria: criteria,
+                searchValue: searchValue
+            },
+            success: function (response) {
+                try {
+                    console.log('Réponse reçue :', response); // Affiche la réponse dans la console
+                    $('#custom-table-body').empty();
+
+                    if (Array.isArray(response)) {
+                        console.log('Nombre d\'éléments reçus :', response.length); // Affiche le nombre d'éléments reçus
+                        response.forEach(function (evenement) {
+                            console.log('Données de l\'événement :', evenement); // Affiche les données de chaque événement
+
+                            var row = '<tr>' +
+                                '<td>' + (evenement.titre ? evenement.titre : '') + '</td>' +
+                                '<td>' + (evenement.description ? evenement.description : '') + '</td>' +
+                                '<td>' + (evenement.dateDepart ? new Date(evenement.dateDepart).toLocaleDateString() : '') + '</td>' +
+                                '<td>' + (evenement.typeevenement ? evenement.typeevenement : '') + '</td>' +
+                                '<td>' + (evenement.guideId ? evenement.guideId : '') + '</td>' +
+                                '<td>' + (evenement.destination ? evenement.destination : '') + '</td>' +
+                                '<td>' + (evenement.image ? evenement.image : '') + '</td>' +
+                                '<td>' + (evenement.sponsorevenement ? evenement.sponsorevenement : '') + '</td>' +
+                                '<td>' + (evenement.prix ? evenement.prix : '') + '</td>' +
+                                   '<td>' +
+                                    '<form action="/evenements/edit/' + (evenement.idevenement ? evenement.idevenement : '') + '" method="GET">' +
+                                    '<button type="submit"><i class="fas fa-edit"></i></button>' +
+                                    '</form>' +
+                                    '<form action="/evenements/delete/' + (evenement.idevenement ? evenement.idevenement : '') + '" method="POST" onsubmit="return confirm(\'Êtes-vous sûr de vouloir supprimer cet événement ?\')">' +
+                                    '<input type="hidden" name="_token" value="VotreTokenDeCSRF">' +
+                                    '<button type="submit"><i class="fas fa-trash-alt"></i></button>' +
+                                    '</form>' +
+                                    '</td>' +
+                                    '</tr>';
+
+                            $('#custom-table-body').append(row);
+                        });
+                    } else {
+                        console.error('La réponse n\'est pas un tableau.'); // Affiche une erreur si la réponse n'est pas un tableau
+                    }
+                } catch (error) {
+                    console.error("Erreur lors de l'affichage des données :", error);
+                    alert("Erreur lors de la recherche");
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                alert("Erreur lors de la recherche");
+            }
+        });
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
