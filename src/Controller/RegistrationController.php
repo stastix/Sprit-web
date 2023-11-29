@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\Authenticator;
 use App\Security\EmailVerifier;
+ 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,39 +20,80 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
+use Symfony\Component\Mailer\MailerInterface;
+use App\Service\TwilioService;
+
+
 class RegistrationController extends AbstractController
 {
     private EmailVerifier $emailVerifier;
+    private MailerInterface $mailer;
+    private TwilioService $twilioService;
+    
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(EmailVerifier $emailVerifier , MailerInterface $mailer,TwilioService $twilioService)
     {
         $this->emailVerifier = $emailVerifier;
+        $this->twilioService = $twilioService; 
+        
     }
+
+    
+
+    
+
 
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, Authenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
+        
+
         $user->setRole("CLIENT");
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+         
 
         $user->setMotDePasse($form->get('plainPassword')->getData());
+        
+        $dateNaissance = $form->get('dateNaissance')->getData();
+        $dateNaissanceString = $dateNaissance->format('Y-m-d');
+        $user->setDateNaissance($dateNaissanceString);
      
+        
+    
+        $hashedPassword = password_hash($user->getMotDePasse(), PASSWORD_BCRYPT);
+         $user->setMotDePasse($hashedPassword);
+        
 
-           /* $user->setMotDePasse(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );*/
-
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
+
+            $smsMessage = 'Bienvenue sur notre site! Merci pour votre inscription.';
+            $errorMessage = 'Une erreur s\'est produite lors de l\'envoi du SMS.';
+
+            try {
+                // Envoi du SMS après l'inscription
+                $to = '+21621577358'; // Remplacez par le numéro de téléphone de l'utilisateur
+                $message = 'Bienvenue sur notre site! Merci pour votre inscription.';
+                $this->twilioService->sendSMS($to, $message);
+            } catch (\Exception $e) {
+                // Gestion de l'erreur d'envoi SMS
+                $this->addFlash('error', 'Une erreur s\'est produite lors de l\'envoi du SMS.');
+            }
+            
+            // Envoi de l'e-mail de réinitialisation
+           // $this->sendResetPasswordEmail($user);
+
+            
+ 
+
+            // Redirection après l'inscription
+            return $this->redirectToRoute('app_login');
             // generate a signed url and email it to the user
 
             // do anything else you need here, like send an email
@@ -62,7 +104,6 @@ class RegistrationController extends AbstractController
                 $request
             );
         }
-
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
@@ -97,4 +138,8 @@ class RegistrationController extends AbstractController
 
         return $this->redirectToRoute('app_register');
     }
+
+
+
+    
 }

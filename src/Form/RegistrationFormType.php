@@ -20,6 +20,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
+
+
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -50,15 +52,16 @@ class RegistrationFormType extends AbstractType
         )
         ->add('nom',TextType::class, ['attr'=>['class' => 'form-control input-sm','placeholder'=>"Prénom"]])
         ->add('prenom',TextType::class, ['attr'=>['class' => 'form-control input-sm','placeholder'=>"Nom"]])
-        ->add(
-            'date_naissance',
-            DateType::class,[
-            'html5'  => false,
-            'format' => 'dd-MM-yyyy']
-            , ['attr'=>['class' => 'form-control js-datepicker','placeholder'=>"Date de naissance"]]
-        )
-        ->add('genre', ChoiceType::class, array('choices' => array('Autre' => 'Autre','Homme' => 'Homme', 'Femme' => 'Femme')), ['attr'=>['class' => 'form-control h50','placeholder'=>"Nom"]])
-      ->add('numero_telephone',NumberType::class, ['attr'=>['class' => 'form-control input-sm','placeholder'=>"GSM"]])
+        
+        ->add( 'dateNaissance',
+        DateType::class,[
+        'html5'  => false,
+        'mapped'=> false,
+        'format' => 'dd-MM-yyyy']
+        , ['attr'=>['class' => 'form-control js-datepicker','placeholder'=>"Date de naissance"]])
+       
+            ->add('genre', ChoiceType::class, array('choices' => array('Autre' => 'Autre','Homme' => 'Homme', 'Femme' => 'Femme')), ['attr'=>['class' => 'form-control h50','placeholder'=>"Nom"]])
+      ->add('numeroTelephone',NumberType::class, ['attr'=>['class' => 'form-control input-sm','placeholder'=>"numero telephone"]])
       ->add('agreeTerms', CheckboxType::class, [
         'mapped' => false,
         'constraints' => [
@@ -77,4 +80,6 @@ class RegistrationFormType extends AbstractType
             'data_class' => User::class,
         ]);
     }
+
+   
 }

@@ -10,15 +10,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/avis')]
 class AvisController extends AbstractController
 {
     #[Route('/', name: 'app_avis_user', methods: ['GET'])]
-    public function showuser(AvisRepository $avisRepository): Response
+    public function showuser(AvisRepository $avisRepository, PaginatorInterface $paginator, Request $request): Response
     {
+
+        $query = $avisRepository->findAll();
+
+        $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1),
+        4 // Nombre d'items par page
+    );
+
         return $this->render('avis/indexUser.html.twig', [
             'avis' => $avisRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
     #[Route('/tous', name: 'app_avis_index', methods: ['GET'])]
@@ -37,6 +48,20 @@ class AvisController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
+             // Vérifier les bad words
+             $badWords = ['$hit', '$hit2', '$hit3']; // Remplacez ces mots par vos mots interdits
+             $commentContent = $avi->getContenu(); // 
+     
+             foreach ($badWords as $badWord) {
+                 if (stripos($commentContent, $badWord) !== false) {
+                     // Mauvais mot trouvé, renvoyer une réponse d'erreur par exemple
+                     return $this->render('avis/badword_error.html.twig');
+                 }
+             }
+
+
             $entityManager->persist($avi);
             $entityManager->flush();
 

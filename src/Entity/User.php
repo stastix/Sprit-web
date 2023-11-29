@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -38,10 +41,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(min: 4, minMessage: 'Le prenom doit comporter au moins {{ limit }} caractères')]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, name: "motDePasse")]
     private ?string $motDePasse = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,name:"numeroTelephone")]
     #[Assert\NotBlank(message: 'Veuillez remplir tous les champs obligatoires')]
     #[Assert\Length(min: 8, minMessage: 'Le numéro doit comporter au moins {{ limit }} chiffres')]
     #[Assert\Regex(
@@ -50,9 +53,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $numeroTelephone = null;
 
-    #[ORM\Column(type: 'date')]
-    #[Assert\NotBlank(message: 'veuillez remplir tous les champs obligatoires')]
-    private ?\DateTimeInterface $dateNaissance = null;
+    
+    
+#[ORM\Column(length: 255, name: "dateNaissance")]
+    
+    private ?string $dateNaissance = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'veuillez remplir tous les champs obligatoires')]
@@ -61,8 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $isVerified = true;
 
-
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -139,6 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * This method can be removed in Symfony 6.0 - is not needed for apps that do not check user passwords.
      *
      * @see PasswordAuthenticatedUserInterface
+     * 
      */
     public function getPassword(): ?string
     {
@@ -228,12 +233,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDateNaissance(): ?\DateTimeInterface
+    public function getDateNaissance(): ?string
     {
         return $this->dateNaissance;
     }
 
-    public function setDateNaissance(?\DateTimeInterface $dateNaissance): static
+    public function setDateNaissance(?string $dateNaissance): static
     {
         $this->dateNaissance = $dateNaissance;
 
@@ -263,4 +268,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    
 }

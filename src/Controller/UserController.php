@@ -5,12 +5,17 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Driver\Mysqli\Initializer\Options;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+//biblio entity interafce 
 #[Route('/user')]
 class UserController extends AbstractController
 {
@@ -92,7 +97,7 @@ class UserController extends AbstractController
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            //persistance des changements
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
@@ -108,6 +113,7 @@ class UserController extends AbstractController
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            // Marque l'objet $user à supprimer lors de la prochaine opération de flush.
             $entityManager->remove($user);
             $entityManager->flush();
         }
@@ -115,5 +121,27 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
+
+
+
+    #[Route('/user/search', name: 'app_user_search', methods: ['POST'])]
+    public function search(Request $request, UserRepository $userRepository): JsonResponse
+    {
+        $searchTerm = $request->request->get('searchTerm');
+        $users = $userRepository->search($searchTerm);
     
+        // You can customize the response based on your needs
+        $data = [
+            'users' => $users,
+        ];
+    
+        return $this->json($data);
+    }
+
+  
 }
+
+
+
+
+

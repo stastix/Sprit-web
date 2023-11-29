@@ -45,4 +45,29 @@ class UserRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+public function countByGenre($genre)
+{
+    return $this->createQueryBuilder('u')
+        ->select('COUNT(u.id)')
+        ->where('u.genre = :genre')
+        ->setParameter('genre', $genre)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+
+
+public function search($searchTerm)
+{
+    return $this->createQueryBuilder('u')
+        ->where('u.prenom LIKE :searchTerm')
+        ->setParameter('searchTerm', '%'.$searchTerm.'%')
+        ->getQuery()
+        ->getResult();
+}
+
+
+
 }

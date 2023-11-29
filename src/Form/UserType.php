@@ -64,15 +64,16 @@ class UserType extends AbstractType
             }
              
 
-            $builder->add('numero_telephone',NumberType::class, ['attr'=>['class' => 'form-control input-sm','placeholder'=>"GSM"]])
-            ->add(
-                'date_naissance',
-                DateType::class,[
-                'html5'  => false,
-                'format' => 'dd-MM-yyyy']
-                , ['attr'=>['class' => 'form-control js-datepicker','placeholder'=>"Date de naissance"]]
-            )
-            ->add('genre', ChoiceType::class, array('choices' => array('Autre' => 'Autre','Homme' => 'Homme', 'Femme' => 'Femme')), ['attr'=>['class' => 'form-control h50','placeholder'=>"Nom"]])
+            $builder->add('numeroTelephone',NumberType::class, ['attr'=>['class' => 'form-control input-sm','placeholder'=>"GSM"]])
+            ->add( 'dateNaissance',
+            DateType::class,[
+            'html5'  => false,
+            'mapped'=> false,
+            'format' => 'dd-MM-yyyy']
+            , ['attr'=>['class' => 'form-control js-datepicker','placeholder'=>"Date de naissance"]])
+           
+           
+                ->add('genre', ChoiceType::class, array('choices' => array('Autre' => 'Autre','Homme' => 'Homme', 'Femme' => 'Femme')), ['attr'=>['class' => 'form-control h50','placeholder'=>"Nom"]])
             
         ;
         
@@ -102,4 +103,6 @@ class UserType extends AbstractType
             'password' => true,
         ]);
     }
+
+   
 }

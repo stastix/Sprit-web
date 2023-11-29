@@ -19,23 +19,25 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 class Authenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
-
+//nom de route 
     public const LOGIN_ROUTE = 'app_login';
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
     }
-
+    //passport: gerer authen des users:recupere authen user
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
-
+        //dernier user qui a tapé 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
         return new Passport(
+            //permettre chercher user par emailet recupere mdp tapé 
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),
             [
+                //jeton securité token supp
                 new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
                 new RememberMeBadge(),
             ]
