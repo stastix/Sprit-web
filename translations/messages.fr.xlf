@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="fr" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="njvzg9s" resname="customer_service_department">
+        <source>customer_service_department</source>
+        <target>Service client</target>
+      </trans-unit>
+      <trans-unit id="W.nk6go" resname="reservation_manager_or_department">
+        <source>reservation_manager_or_department</source>
+        <target>Responsable des réservations ou service</target>
+      </trans-unit>
+      <trans-unit id="j5Luavh" resname="after_sales_service_department">
+        <source>after_sales_service_department</source>
+        <target>Service après-vente</target>
+      </trans-unit>
+      <trans-unit id="37FhysQ" resname="general_management_or_ceo">
+        <source>general_management_or_ceo</source>
+        <target>Direction générale ou PDG</target>
+      </trans-unit>
+      <trans-unit id="PTpxI57" resname="Popular Requests">
+        <source>Popular Requests</source>
+        <target>Demandes populaires</target>
+      </trans-unit>
+      <trans-unit id="5zCry7Q" resname="Our popular demands requested by you.">
+        <source>Our popular demands requested by you.</source>
+        <target>Populaires demandées par vous.</target>
+      </trans-unit>
+      <trans-unit id="OnhpU4i" resname="Home">
+        <source>Home</source>
+        <target>Acceuil</target>
+      </trans-unit>
+      <trans-unit id="ZWWRRVa" resname="Notice">
+        <source>Notice</source>
+        <target>Avis</target>
+      </trans-unit>
+      <trans-unit id="jRT25y3" resname="Events">
+        <source>Events</source>
+        <target>Evennement</target>
+      </trans-unit>
+      <trans-unit id="0Aqua3_" resname="Shop">
+        <source>Shop</source>
+        <target>Boutique</target>
+      </trans-unit>
+      <trans-unit id="7dFfLoQ" resname="Fidelity card">
+        <source>Fidelity card</source>
+        <target>Carte Fidèlité</target>
+      </trans-unit>
+      <trans-unit id="YE3ORF4" resname="Services">
+        <source>Services</source>
+        <target>Services</target>
+      </trans-unit>
+      <trans-unit id="jGl25bV" resname="admin">
+        <source>admin</source>
+        <target>Admin</target>
+      </trans-unit>
+      <trans-unit id="vMC8yRQ" resname="Sign In">
+        <source>Sign In</source>
+        <target>se connecter</target>
+      </trans-unit>
+      <trans-unit id="rPqt8w9" resname="Duration :">
+        <source>Duration :</source>
+        <target>Durée :</target>
+      </trans-unit>
+      <trans-unit id="zKBmL53" resname="Likes">
+        <source>Likes</source>
+        <target>j'aime</target>
+      </trans-unit>
+      <trans-unit id="YZdZVQP" resname="delete">
+        <source>delete</source>
+        <target>supprimer</target>
+      </trans-unit>
+      <trans-unit id="JiEhxTc" resname="edit">
+        <source>edit</source>
+        <target>Modifier</target>
+      </trans-unit>
+      <trans-unit id="SO2zwuX" resname="By subscribing to our mailing list you will always get latest news and updates from us.">
+        <source>By subscribing to our mailing list you will always get latest news and updates from us.</source>
+        <target>En vous inscrivant à notre liste de diffusion, vous recevrez toujours nos dernières nouvelles et mises à jour.</target>
+      </trans-unit>
+      <trans-unit id="83ZnfO2" resname="You can write to us your concerns">
+        <source>You can write to us your concerns</source>
+        <target>Vous pouvez nous écrire vos réclamations</target>
+      </trans-unit>
+      <trans-unit id="kWo2rUE" resname="Complaint target">
+        <source>Complaint target</source>
+        <target>Cible reclamée</target>
+      </trans-unit>
+      <trans-unit id="mcQKtAW" resname="Date">
+        <source>Date</source>
+        <target>Date</target>
+      </trans-unit>
+      <trans-unit id="L3dmip3" resname="Message">
+        <source>Message</source>
+        <target>Message</target>
+      </trans-unit>
+      <trans-unit id="o7UMR2c" resname="State">
+        <source>State</source>
+        <target>Etat</target>
+      </trans-unit>
+      <trans-unit id="ZM.xMZ0" resname="Action">
+        <source>Action</source>
+        <target>Action</target>
+      </trans-unit>
+      <trans-unit id="WJQnhqe" resname="Customer Service Department">
+        <source>Customer Service Department</source>
+        <target>Service client</target>
+      </trans-unit>
+      <trans-unit id="SHiRfvH" resname="Reservation Manager or Department">
+        <source>Reservation Manager or Department</source>
+        <target>Responsable des réservations ou service</target>
+      </trans-unit>
+      <trans-unit id="n3iifYL" resname="After-Sales Service Department">
+        <source>After-Sales Service Department</source>
+        <target>Service après-vente</target>
+      </trans-unit>
+      <trans-unit id="GwoEnAj" resname="General Management or CEO">
+        <source>General Management or CEO</source>
+        <target>Direction générale ou PDG</target>
+      </trans-unit>
+      <trans-unit id="O04XPqS" resname="Select date">
+        <source>Select date</source>
+        <target>Selectionner une date</target>
+      </trans-unit>
+      <trans-unit id="n9coxmy" resname="Add">
+        <source>Add</source>
+        <target>Ajouter</target>
+      </trans-unit>
+      <trans-unit id="3.majRN" resname="complaint added">
+        <source>complaint added</source>
+        <target>Réclamation Ajoutée</target>
+      </trans-unit>
+      <trans-unit id="9iroKL4" resname="complaint edited">
+        <source>complaint edited</source>
+        <target>Réclamation Modifier</target>
+      </trans-unit>
+      <trans-unit id="aNEGS_O" resname="complaint deleted">
+        <source>complaint deleted</source>
+        <target>Réclamation supprimée</target>
+      </trans-unit>
+      <trans-unit id="pP5lJk7" resname="Language">
+        <source>Language</source>
+        <target>Langue</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

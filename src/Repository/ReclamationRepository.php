@@ -55,4 +55,23 @@ public function showreclamationandUser()
     ->getQuery()
     ->getResult();
 }
+public function showreclamationandUser2()
+{
+    return $this->createQueryBuilder('r')
+    ->join('r.UseName', 'u')
+    ->addSelect('u')
+    ->getQuery()
+    ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+}
+public function searchByCible($cible)
+{
+    return $this->createQueryBuilder('r')
+        ->join('r.UseName', 'u')
+        ->addSelect('u')           
+        ->andWhere("r.CibleReclamation = :cible")
+        ->setParameter('cible', $cible)
+        ->getQuery()
+        ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+}
+
 }

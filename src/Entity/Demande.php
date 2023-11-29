@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\DemandeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
 
 #[ORM\Entity(repositoryClass: DemandeRepository::class)]
 class Demande
@@ -29,6 +32,15 @@ class Demande
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
     private ?User $UseName = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[JoinTable('demande_user')]
+    private Collection $likes;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -95,4 +107,48 @@ class Demande
 
         return $this;
     }
+
+  
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(User $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+        }
+
+        return $this;
+    }
+
+    public function removeLike(User $like): static
+    {
+        $this->likes->removeElement($like);
+
+        return $this;
+    }
+
+
+
+    public function isLikedByUser(User $user): bool
+    {
+        
+        return $this->likes->contains($user);
+    }
+
+   
+    /**
+     * Get the number of likes 
+     *
+     * @return integer
+     */
+    public function howManyLikes(): int
+    {
+        return count($this->likes);
+    }
+
+
+    
 }

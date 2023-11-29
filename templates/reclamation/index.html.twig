@@ -34,37 +34,56 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 {# //google fonts #}
 
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website Title</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-e4HVoCFT9R9lqc7dL7L61xOOPOjB3ttfVnFoIkPwk2P4xEGa1Nzssj5cJCIIQhdy" crossorigin="anonymous"></script>
+<!-- Include jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Include Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-e4HVoCFT9R9lqc7dL7L61xOOPOjB3ttfVnFoIkPwk2P4xEGa1Nzssj5cJCIIQhdy" crossorigin="anonymous"></script>
 
 </head>
 <body>
 
 <!-- header -->
 <header>
-	<div class="container">
-		<!-- nav -->
-		<nav class="py-md-4 py-3 d-lg-flex">
-			<div id="logo">
-				<h1 class="mt-md-0 mt-2"> <a href="index.html"><span class="fa fa-map-signs"></span> Epic Journeys </a></h1>
-			</div>
-			<label for="drop" class="toggle"><span class="fa fa-bars"></span></label>
-			<input type="checkbox" id="drop" />
-			<ul class="menu ml-auto mt-1">
-				<li class=""><a href="{{ path('app_default')}}">Home</a></li>
-				<li class=""><a href="avis.html">Notice</a></li>
-				<li class=""><a href="evenements.html">Events</a></li>
-				<li class=""><a href="boutique.html">Shop</a></li>
-				<li class=""><a href="contact.html">Fidelity card</a></li>
-				<li class=""><a href="{{ path('add_reclamation') }}">Services</a></li>
-				<li class=""><a href="{{ path('sign_up') }}">admin</a></li>
-				<li class="booking"><a href="{{ path('sign_in') }}">Sign In</a></li>
-				
-				
+    <div class="container">
+        <!-- nav -->
+        <nav class="py-md-4 py-3 d-lg-flex">
+            <div id="logo">
+                <h1 class="mt-md-0 mt-2"> <a href="index.html"><span class="fa fa-map-signs"></span> Epic Journeys </a></h1>
+            </div>
+            <label for="drop" class="toggle"><span class="fa fa-bars"></span></label>
+            <input type="checkbox" id="drop" />
+            <ul class="menu ml-auto mt-1">
+                <li class=""><a href="{{ path('app_default')}}">{% trans %}Home{% endtrans %}</a></li>
+                <li class=""><a href="avis.html">{% trans %}Notice{% endtrans %}</a></li>
+                <li class=""><a href="evenements.html">{% trans %}Events{% endtrans %}</a></li>
+                <li class=""><a href="boutique.html">{% trans %}Shop{% endtrans %}</a></li>
+                <li class=""><a href="contact.html">{% trans %}Fidelity card{% endtrans %}</a></li>
+                <li class=""><a href="{{ path('add_reclamation') }}">{% trans %}Services{% endtrans %}</a></li>
+                <li class=""><a href="{{ path('sign_up') }}">{% trans %}admin{% endtrans %}</a></li>
+                <li class="booking"><a href="{{ path('sign_in') }}">{% trans %}Sign In{% endtrans %}</a></li>
+                          <li class="nav-item">
+            <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i>{% trans %}Language{% endtrans %}</a>
+           <nav class="az-menu-sub">
+    <a href="{{ path('change_locale', {'locale': 'fr'}) }}" class="nav-link">Francais</a>
+    <a href="{{ path('change_locale', {'locale': 'en'}) }}" class="nav-link">English</a>
+</nav>
+          </li>
 
-				
-			</ul>
-		</nav>
-		<!-- //nav -->
-	</div>
+            </ul>
+        </nav>
+        <!-- //nav -->
+    </div>
+	
 </header>
 <!-- //header -->
 <!-- banner -->
@@ -89,7 +108,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         }
     </style>
     <div class="container py-lg-5 py-sm-3">
-        <h2 class="heading text-capitalize text-center mb-sm-5 mb-4"> You can write to us your concerns</h2>
+        <h2 class="heading text-capitalize text-center mb-sm-5 mb-4">{% trans %} You can write to us your concerns{% endtrans %}</h2>
 
         <div class="contact-grids mt-5">
             <div class="row">
@@ -119,10 +138,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <table class="custom-table">
                         <thead>
                             <tr>
-                                <th>Complaint target</th>
-                                <th>Date</th>
-                                <th>Message</th>
-                                <th>Action</th>
+                                <th>{% trans %}Complaint target{% endtrans %}</th>
+                                <th>{% trans %}Date{% endtrans %}</th>
+                                <th>{% trans %}Message{% endtrans %}</th>
+								<th>{% trans %}State{% endtrans %}</th>
+                                <th>{% trans %}Action{% endtrans %}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -131,9 +151,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                     <td>{{ reclamation.CibleReclamation }}</td>
                                     <td>{{ reclamation.dateReclamation|date('Y-m-d') }}</td>
                                     <td>{{reclamation.TextReclamation}}</td>
+									<td>{{ reclamation.EtatReclamation }}</td>
+
                                     <td>
-                                        <a href="{{ path('reclamation_delete', {'id': reclamation.id}) }}">delete /</a>
-                                        <a href="{{ path('reclamation_edit', {'id': reclamation.id}) }}">edit</a>
+                                        <a href="{{ path('reclamation_delete', {'id': reclamation.id}) }}">{% trans %}delete {% endtrans %}/</a>
+                                        <a href="{{ path('reclamation_edit', {'id': reclamation.id}) }}">{% trans %}edit{% endtrans %}</a>
+                                         <a href="{{ path('app_home', {'id': reclamation.id}) }}">translate</a>
                                     </td>
                                 </tr>
                             {% else %}

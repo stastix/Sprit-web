@@ -20,6 +20,12 @@ class ReservationsController extends AbstractController
             'controller_name' => 'ReservationsController',
         ]);
     }
+
+    #[Route('/killme', name: 'kill_me')]
+    public function indexx(): Response {
+        return $this->render('killme.html.twig');
+
+    }
     #[Route('/reservations/list', name: 'slist_evennement')]
     public function slist()
     {
