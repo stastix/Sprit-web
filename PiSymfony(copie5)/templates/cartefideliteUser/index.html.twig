@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}    
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loyalty Card Details</title>
+    <!-- Add your stylesheets or any additional head elements here -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #3498db;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px; /* Adjusted margin for better spacing */
+        }
+
+        img {
+            max-width: 100%; /* Ensure images do not overflow their container */
+            height: auto; /* Maintain aspect ratio of images */
+        }
+
+        button {
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Add more specific styling as needed */
+
+    </style>
+</head>
+
+<body>
+
+    <h1>Loyalty Card</h1>
+
+    <section>
+        {% if user is defined %}
+            <ul>
+                <li><h2>Hello {{ user.prenom }}</h2></li>
+                <li><h3>We hope you're doing fine.</h3></li>
+            </ul>
+        {% endif %}
+    </section>
+
+    <div>
+        <h1>Loyalty Card Information</h1>
+        <ul>
+            {% if cartefidelite is defined %}
+                <li><h3>Points Fidélité: {{ cartefidelite.ptsfidelite }}</h3></li>
+                <li><h3>Date Debut: {{ cartefidelite.datedebut|date('Y-m-d') }}</h3></li>
+                <li><h3>Date Fin: {{ cartefidelite.datefin|date('Y-m-d') }}</h3></li>
+                <li><h3>Etat Carte: <span style="color: {{ cartefidelite.etatcarte == 'Active' ? 'green' : 'red' }};">{{ cartefidelite.etatcarte }}</span></h3></li>
+                <li>
+                    <h4>Niveau Carte:</h4>
+                    {% set niveauCarte = cartefidelite.niveaucarte %}
+                    {% if niveauCarte in ['bronze', 'silver', 'gold'] %}
+                        <img src="{{ asset('img/' ~ niveauCarte ~ '.png') }}" alt="{{ niveauCarte|capitalize }}">
+                    {% endif %}
+                </li>
+
+                {% if cartefidelite.NiveauCarte != 'gold' %}
+                    {% if cartefidelite.ptsfidelite >= 1000 %}
+                        <h4>You can upgrade now</h4>
+                        <a href="{{ path('app_cartefidelite_upgrade', {'id': user.id}) }}">
+                            <button>Upgrade</button>
+                        </a>
+                    {% else %}
+                        <h4>You don't have enough points to upgrade</h4>
+                    {% endif %}
+                {% else %}
+                    <h4>Your card is already at the highest level (gold)</h4>
+                {% endif %}
+            {% else %}
+                <li><h3>No loyalty card found.</h3></li>
+                {# Add logic here for creating a new card if needed #}
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- You can add more sections or customize the layout based on your requirements -->
+
+    <!-- Add your scripts or any additional body elements here -->
+
+</body>
+
+</html>
+{% endblock %}
