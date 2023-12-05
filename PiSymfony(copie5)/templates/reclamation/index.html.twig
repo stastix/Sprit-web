@@ -6,16 +6,17 @@
     <style>
         .custom-table {
             border: 1px solid #ddd; /* Add a border to the table */
-            width: 100%;
+            width: 120%; /* Increase the width of the table */
             margin-top: 20px; /* Add some margin to the top */
         }
-
+    
         .custom-table th, .custom-table td {
             border: 1px solid #ddd; /* Add borders to table cells */
-            padding: 8px; /* Add padding to table cells */
+            padding: 12px; /* Increase padding for table cells */
             text-align: left; /* Align text to the left */
         }
     </style>
+    
     <div class="container py-lg-5 py-sm-3">
         <h2 class="heading text-capitalize text-center mb-sm-5 mb-4">{% trans %} You can write to us your concerns{% endtrans %}</h2>
 
@@ -63,9 +64,10 @@
 									<td>{{ reclamation.EtatReclamation }}</td>
 
                                     <td>
-                                        <a href="{{ path('reclamation_delete', {'id': reclamation.id}) }}">{% trans %}delete {% endtrans %}/</a>
-                                        <a href="{{ path('reclamation_edit', {'id': reclamation.id}) }}">{% trans %}edit{% endtrans %}</a>
-                                         <a href="{{ path('app_home3', {'id': reclamation.id}) }}">translate</a>
+                                        <a href="{{ path('reclamation_delete', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">{% trans %}delete {% endtrans %}/</a>
+                                        <a href="{{ path('reclamation_edit', {'id': reclamation.id}) }} "class="btn btn-primary btn-sm">{% trans %}edit{% endtrans %}</a>
+                                        <a href="{{ path('app_home3', {'id': reclamation.id}) }}" class="btn btn-sm" style="background-color: #4caf50; color: #ffffff;">translate</a>
+
                                     </td>
                                 </tr>
                             {% else %}

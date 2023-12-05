@@ -76,8 +76,10 @@
 						<h6 class="mt-1"><span class="fa fa-map-marker mr-2"></span>{{ event.destinationsaif}}</h6>
 						<h5 class="my-2">{{ event.titlesaif}}</h5>
 						<p class="">{{ event.typesaif}}</p>
-						
+						{% if is_granted('ROLE_CLIENT') or is_granted('ROLE_GUIDE') or is_granted('ROLE_ADMIN') %}
+
 						<a href="{{ path('sbooking', {'id': event.id}) }}">more details</a>
+						{% endif %}
 						<ul class="listing mt-3">
 							<li><span class="fa fa-clock-o mr-2"></span>Duration : <span>{{ event.durationsaif}}</span></li>
 						</ul>
@@ -180,13 +182,6 @@
     </style>
 
 
-	{% if is_granted('ROLE_CLIENT') or is_granted('ROLE_GUIDE') or is_granted('ROLE_ADMIN') %} 
-	<div class="view-package text-center mt-4">
-		<h3 class="heading text-capitalize text-center"> Couldn't find an event you like?</h3>
-		<p class="text mt-2 mb-1 text-center"> Feel free to infuse your personal touch by expressing your preferences for an event you'd love to partake in with us. </p>
-<a href="{{ path('add_demande') }}">Request An Event</a>
- </div>
-{% endif %}
 
 
 
@@ -215,8 +210,12 @@
 							<div class="destinations-info">
 								<div class="caption mb-lg-3">
 									<h4>{{ offrespecialevenment.destination }}</h4>
-									<a href="{{ path('sbooking2', {'id': offrespecialevenment.idoffrespecialevenment}) }}">Book Now</a>
-								</div>
+									{% if is_granted('ROLE_CLIENT') or is_granted('ROLE_GUIDE') or is_granted('ROLE_ADMIN') %} 
+									<a href="{{ path('app_offrespecialevenment_booking', {'idoffrespecialevenment': offrespecialevenment.idoffrespecialevenment}) }}">Book Now</a> 
+									{%else%} 
+									<a href="{{ path('app_login') }}">Book Now</a>  
+									{% endif %} 
+									</div>
 								<div class="rating">
 									<!-- Replace the stars with badge icons or images -->
 									<ul>
@@ -239,6 +238,13 @@
 	</section>
 	
 
+	{% if is_granted('ROLE_CLIENT') or is_granted('ROLE_GUIDE') or is_granted('ROLE_ADMIN') %} 
+	<div class="view-package text-center mt-4">
+		<h3 class="heading text-capitalize text-center"> Couldn't find an event you like?</h3>
+		<p class="text mt-2 mb-1 text-center"> Feel free to infuse your personal touch by expressing your preferences for an event you'd love to partake in with us. </p>
+<a href="{{ path('add_demande') }}">Request An Event</a>
+ </div>
+{% endif %}
 
 
 
@@ -267,7 +273,8 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const data = {{ data|json_encode|raw }};
 

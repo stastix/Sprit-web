@@ -45,12 +45,14 @@ class ReservationsController extends AbstractController
     {
 
 
+     
         $lowBudgetEvents = $evenementsRepository->findLowBudgetEvents();
+
         $data = [];
-    foreach ($lowBudgetEvents as $event) {
-        $data[$event->getTitre()] = $event->getPrix();
-    }
-    $closestEvent = $evenementsRepository->findClosestEvent();
+        foreach ($lowBudgetEvents as $event) {
+            $data[$event->getTitre()] = $event->getPrix();
+        }
+        $closestEvent = $evenementsRepository->findClosestEvent();
 
 
         $user = $this->getUser();
@@ -161,7 +163,7 @@ class ReservationsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $Comments->setIdEvent($id);
             $Comments->setEventssaif($events);
-            $Comments->setUserName($user->getUsername());
+            $Comments->setUserName($user->getNom());
           
             $em->persist($Comments);
             $em->flush();
@@ -192,7 +194,7 @@ class ReservationsController extends AbstractController
         $imm=$comment->getEventssaif();
         $im=$imm->getImagesaif();
         $prix=$imm->getPrixsaif();
-        if ($comment->getUserName() == $user->getUsername()) {
+        if ($comment->getUserName() == $user->getNom()) {
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
 
@@ -229,7 +231,7 @@ class ReservationsController extends AbstractController
         $imm=$Comment1->getEventssaif();
         $im=$imm->getImagesaif();
         $f=$Comment1->getIdEvent();
-        if ($Comment1->getUserName() == $user->getUsername()) {
+        if ($Comment1->getUserName() == $user->getNom()) {
         $em->remove($Comment1);
         $em->flush();
         $this->addFlash('successC', 'Comment suprimer');
@@ -289,7 +291,7 @@ class ReservationsController extends AbstractController
 
 
         $cartefidelite = $user->getCartefidelite();  
-        $incrementValue = round($basePrice / 100);
+        $incrementValue = round($basePrice );
         $cartefidelite->setPtsfidelite($cartefidelite->getPtsfidelite() + $incrementValue);
         $em = $this->getDoctrine()->getManager(); 
         $em->flush(); 

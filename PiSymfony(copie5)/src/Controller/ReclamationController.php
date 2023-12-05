@@ -59,18 +59,29 @@ public function addReclamation(Request $request, ManagerRegistry $managerRegistr
     #[Route('/reclamation/edit/{id}', name: 'reclamation_edit')]
     public function editReclamation(Request $request, ManagerRegistry $manager, ReclamationRepository $reclamationRepository, $id): Response
     {
+
+        $user = $this->getUser();
+        $usrid = $user->getId();
         $em = $manager->getManager();
         $reclamation  = $reclamationRepository->find($id);
+     
         $form = $this->createForm(ReclamationsType::class, $reclamation);
         $form->handleRequest($request);
-
+        if ($reclamation->getUseName() == $user){ 
         if ($form->isSubmitted()) {
             $em->persist($reclamation);
             $em->flush();
             $this->addFlash('successC', 'complaint edited');
 
             return $this->redirectToRoute('add_reclamation');
+        }}
+        else {
+            $em->flush();
+            $this->addFlash('successC', 'it is not yours');
+            return $this->redirectToRoute('add_reclamation');
         }
+
+
             return $this->render('reclamation/index.html.twig', [
                 'reclamations' => $reclamationRepository->findAll(),
                 'f' => $form->createView()]);
@@ -80,20 +91,22 @@ public function addReclamation(Request $request, ManagerRegistry $managerRegistr
 
     #[Route('/reclamation/delete/{id}', name: 'reclamation_delete')]
     public function deleteReclamation (Request $request, ManagerRegistry $manager, $id, ReclamationRepository $reclamationRepository ): Response
-    {
+    {  $user = $this->getUser();
         $em = $manager->getManager();
         $reclamation = $reclamationRepository->find($id);
-        if (!$reclamation) {
-            
-             return $this->redirectToRoute('add_reclamation');
-            
-        }
+        if ($reclamation->getUseName() != $user){ 
         $em->remove($reclamation);
         $em->flush();
         $this->addFlash('successC', 'complaint deleted');
         
             return $this->redirectToRoute('add_reclamation');
-    
+    }
+    else {
+        $em->flush();
+        $this->addFlash('successC', 'it is not yours');
+        return $this->redirectToRoute('add_reclamation');
+    }
+
     }
 
     #[Route('/showreclamation', name:'reclamation_show')]

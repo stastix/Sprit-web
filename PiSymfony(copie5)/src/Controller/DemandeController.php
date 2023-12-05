@@ -89,12 +89,12 @@ class DemandeController extends AbstractController
 
     #[Route('/demande/edit/{id}', name: 'demande_edit')]
     public function editDemande(Request $request, ManagerRegistry $manager, DemandeRepository $demandeRepository, $id): Response
-    {
+    { $user = $this->getUser(); 
         $em = $manager->getManager();
         $demande  = $demandeRepository->find($id);
         $form = $this->createForm(DemandeType::class, $demande);
         $form->handleRequest($request);
-
+        if ($demande->getUseName() == $user){ 
         if ($form->isSubmitted()) {
             $em->persist($demande);
             $em->flush();
@@ -102,16 +102,24 @@ class DemandeController extends AbstractController
 
             return $this->redirectToRoute('add_demande');
         }
+   
             return $this->render('demande/index.html.twig', [
                 'demands' => $demandeRepository->findAll(),
-                'f' => $form->createView()]);
-    
+                'f' => $form->createView(),
+                'user' =>   $user ]);
+            }
+            else {
+              
+                $this->addFlash('successC', 'it is not yours');
+                return $this->redirectToRoute('add_demande');
+            }
+        
     }
 
 
     #[Route('/demande/delete/{id}', name: 'demande_delete')]
     public function deleteDemande (Request $request, ManagerRegistry $manager, $id, DemandeRepository $demandeRepository ): Response
-    {
+    {$user = $this->getUser(); 
         $em = $manager->getManager();
         $demande = $demandeRepository->find($id);
         if (!$demande) {
@@ -119,11 +127,17 @@ class DemandeController extends AbstractController
              return $this->redirectToRoute('add_demande');
             
         }
+        if ($demande->getUseName() == $user){ 
         $em->remove($demande);
         $em->flush();
         $this->addFlash('successC', 'request deleted');
         
-            return $this->redirectToRoute('add_demande');
+            return $this->redirectToRoute('add_demande');}
+            else {
+              
+                $this->addFlash('successC', 'it is not yours');
+                return $this->redirectToRoute('add_demande');
+            }
     
     }
 
