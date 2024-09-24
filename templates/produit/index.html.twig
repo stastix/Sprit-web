@@ -1,0 +1,228 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}
+    <title>dashboard</title>
+{% endblock %}
+
+{% block body %}
+    <div align="center">
+        <style>
+            /* Center the content */
+            .center-align {
+                text-align: center;
+            }
+        
+            /* Add some spacing between elements */
+            .spacing {
+                margin-top: 20px;
+            }
+        
+            /* Style for alert messages */
+            .alert {
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+        
+            .alert-danger {
+                background-color: #f2dede;
+                border-color: #ebccd1;
+                color: #a94442;
+            }
+        
+            /* Style for tables */
+            .table {
+                width: 100%;
+                margin-top: 20px;
+                border-collapse: collapse;
+            }
+        
+            .table th, .table td {
+                border: 2px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+        
+            /* Style for the chart container */
+            #ordersChartContainer {
+                margin-top: 20px;
+            }
+            .form-group {
+                align="center"
+                margin-bottom: 15px;
+            }
+            
+            .form-control {
+                width: 100%;
+                padding: 8px;
+            }
+            
+            .btn-primary {
+                background-color: #007bff;
+                color: #fff;
+            }
+            .form-container {
+                max-width: 400px; /* Adjust the maximum width as needed */
+                margin: auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            /* Form fields */
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            .form-control {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+            
+            /* Submit button */
+            .btn-primary {
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+            
+        </style>
+        
+            <div align="center">
+                {{ form_start(f, {'attr': {'class': 'form-container'}}) }}
+                <div class="form-group">
+                    {{ form_label(f.nom, 'Nom') }}
+                    {{ form_widget(f.nom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            
+                <div class="form-group">
+                    {{ form_label(f.prixUnitaire, 'Prix Unitaire') }}
+                    {{ form_widget(f.prixUnitaire, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(f.stock, 'stock') }}
+                    {{ form_widget(f.stock, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(f.image, 'image') }}
+                    {{ form_widget(f.image, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <!-- Repeat the pattern for other form fields -->
+            
+                <div class="form-group">
+                    {{ form_label(f.add, 'Submit') }}
+                    {{ form_widget(f.add, {'attr': {'class': 'btn btn-primary'}}) }}
+                </div>
+            {{ form_end(f) }}
+            
+                <br>
+        
+        <br>
+
+        <div>
+            {% for flashMessage in app.flashes('danger') %}
+                <div class="alert alert-danger">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Tableau des produits -->
+        <table class="table" border="2px">
+            <thead>
+                <tr>
+                    <th>nom</th>
+                    <th>prix</th>
+                    <th>stock</th>
+                    <th>image</th>
+                    <th>action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produit in produits %}
+                    <tr>
+                        <td>{{ produit.nom }}</td>
+                        <td>{{ produit.prixunitaire }}</td>
+                        <td>{{ produit.stock }}</td>
+                        <td>{{ produit.image }}</td>
+                        <td><a href="{{ path('produit_edit', {'id': produit.id}) }}">edit</a></td>
+                        <td><a href="{{ path('produit_delete', {'id': produit.id}) }}">delete</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">no product found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Tableau des commandes -->
+        <table class="table" border="2px">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Product ID</th>
+                    <th>Confirmed</th>
+                    <!-- Ajoutez plus de colonnes selon les propriétés de votre entité Commande -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandes %}
+                    <tr>
+                        <td>{{ commande.userId }}</td>
+                        <td>{{ commande.productId }}</td>
+                        <td>{{ commande.Comfirmed ? 'Yes' : 'No' }}</td>
+                        <!-- Ajoutez plus de cellules en fonction des propriétés de votre entité Commande -->
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">no command found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+     <div align="center">
+        <!-- Graphique pour les commandes confirmées/non confirmées -->
+        <canvas id="ordersChart" width="50" height="50"></canvas>
+
+       
+
+      <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Récupérez les données à partir des variables Symfony (remplacez-les par vos données)
+        var commandes = {{ commandes | json_encode | raw }};
+        // Vérifiez les données des commandes dans la console
+        console.log(commandes);
+        // Initialisez les compteurs
+        var confirmedCount = {{confirmedCounts}};
+        var unconfirmedCount ={{unconfirmedCounts}};
+
+        // Configurer le graphique pour les commandes confirmées/non confirmées
+        var ordersCtx = document.getElementById('ordersChart').getContext('2d');
+        var ordersChart = new Chart(ordersCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Confirmed', 'Unconfirmed'],
+                datasets: [{
+                    data: [confirmedCount, unconfirmedCount],
+                    backgroundColor: ['green', 'red']
+                }]
+            }
+        });
+    });
+</script>
+    </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base-back.html.twig' %}
+{% block body %}
+    <div class="statistics-container">
+        <h2>Statistics</h2>
+        <canvas id="complaintChart" width="300" height="120"></canvas>
+    </div>
+
+    <style>
+        .statistics-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #complaintChart {
+            margin-top: 20px;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('complaintChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for target, percentage in complaintStatistics %}"{{ target }}",{% endfor %}],
+                    datasets: [{
+                        label: 'Complaint Statistics',
+                        data: [{% for target, percentage in complaintStatistics %}{{ percentage }},{% endfor %}],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
