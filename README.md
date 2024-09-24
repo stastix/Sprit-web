@@ -37,5 +37,3 @@ Ou
 symfony serve
 # Ouvrez votre navigateur et accédez à http://localhost:8000
 ```
-
-"# Pidev-Ghofrane-symfony"
