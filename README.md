@@ -4,14 +4,8 @@
 
 ## Description
 
-Le but de cet atelier est la manipulation de la Base de données.
-ORM Doctrine et CRUD
-- Atelier 2.1 : La mise en place d'un projet symfony
-- Atelier 2.2 : La manipulation des controllers + routing
-- Atelier 3 : Twig
-- Atelier 4 (Partie 1 et 2 ) ORM-Doctrine
-- Atelier 5 : Dql-QB
-  
+This project aims to automate the process of reserving travel events. It provides an easy-to-use platform for users to browse, select, and book travel events seamlessly, with features for event management, user registration, and automated booking confirmation. The system is designed to handle a wide variety of travel events, such as tours, special offers, and packages, ensuring a smooth reservation experience for both users and administrators.
+
 ## Table des matières
 
 - [Installation](#installation)
@@ -19,21 +13,29 @@ ORM Doctrine et CRUD
 
 ## Installation
 
-Décrivez comment installer et configurer votre projet Symfony. Incluez les prérequis et les instructions étape par étape pour mettre en place le projet sur un environnement de développement local.
+Follow these steps to install and set up the project on your local development environment:
+
+Prerequisites
+PHP 7.4 or higher
+Composer
+Symfony CLI (optional)
+MySQL or PostgreSQL
 
 ```bash
-git clone https://github.com/esprit-upweb/my_symfony_project_correction.git
-cd my_symfony_project_correction
+git clone https://github.com/maramsaoudi/EpicJourneys
+cd EpicJourneys
 composer install
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:update --force
 ```
 
 ## Utilisation
+
 ```bash
 php bin/console server:start
-Ou 
+Ou
 symfony serve
 # Ouvrez votre navigateur et accédez à http://localhost:8000
 ```
-"# Pidev-Ghofrane-symfony" 
+
+"# Pidev-Ghofrane-symfony"
